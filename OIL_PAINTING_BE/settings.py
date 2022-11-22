@@ -29,7 +29,9 @@ INSTALLED_APPS = [
     'users',
     'painters',
     'inquiries',
+    'image_optimizer',
 ]
+OPTIMIZED_IMAGE_METHOD = "pillow"
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -160,3 +162,6 @@ SIMPLE_JWT = {
 
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
+
+STATIC_ROOT = BASE_DIR / "static"
+STATIC_URL = "/static/"
