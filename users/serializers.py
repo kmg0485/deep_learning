@@ -27,8 +27,6 @@ class UserSerializer(serializers.ModelSerializer):
         email = validated_data.get("email")
         email_reg = r'^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
         password_nickname_reg = r"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{5,}$"
-        print(type(email_reg))
-        print(type(password_nickname_reg))
         nickname = validated_data.get("nickname")
         password = validated_data.get("password")
         password_check = validated_data.get("password_check")
@@ -36,11 +34,11 @@ class UserSerializer(serializers.ModelSerializer):
         # 이메일 유효성 체크
         if not re.search(email_reg, str(email)) :
             raise serializers.ValidationError(detail={"email":"이메일 형식에 맞춰서 작성해 주세요."})
-        
+
         # 닉네임 유효성 체크
         if not re.search(password_nickname_reg, str(nickname)) :
             raise serializers.ValidationError(detail={"nickname":"최소 한 개의 영문자와 숫자를 포함해 5글자 이상으로 만들어 주세요."})
-        
+
         # 비밀번호 유효성 체크
         if not re.search(password_nickname_reg, str(password)) :
             raise serializers.ValidationError(detail={"password":"최소 한 개의 영문자와 숫자를 포함해 5글자 이상으로 만들어 주세요."})
