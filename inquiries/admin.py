@@ -1,3 +1,4 @@
 from django.contrib import admin
+from inquiries.models import Inquiry
 
-# Register your models here.
+admin.site.register(Inquiry)
