@@ -32,7 +32,7 @@ class ProfileView(APIView) :
     def put(self, request) :
         user = get_object_or_404(User, id=request.user.id)
         if user == request.user :
-            serializer = ProfileEditSerializer(user, data=request.data)
+            serializer = ProfileEditSerializer(user, data=request.data, context={"request":request})
             if serializer.is_valid() :
                 serializer.save()
                 return Response({"message":"변경 완료!"}, status=status.HTTP_201_CREATED)
