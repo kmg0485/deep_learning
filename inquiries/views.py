@@ -71,6 +71,7 @@ class CommentView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class CommentDetailView(APIView):
 
     def put(self, request, inquiry_id, comment_id):
