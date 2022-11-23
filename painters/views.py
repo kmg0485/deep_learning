@@ -6,7 +6,7 @@ from django.http import HttpResponse, Http404
 import urllib
 from .models import Painting
 from users.models import User
-from painters.models import Painting
+from painters.models import Painting, Painter
 from painters.serializers import ImageCreateSerializer
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -34,8 +34,12 @@ class ImageView(APIView) :
     
     def post(self, request) :
         serializer = ImageCreateSerializer(data = request.data)
+        painter = Painter.objects.get(id=request.data["painter"])
+        print(f"페인터의 id : {request.data['painter']}")
+        print(f"화풍 스타일 : {painter.style}")
         if serializer.is_valid() :
             serializer.save(user=request.user)
+            print(f"콘텐트, 넣은 사진 : {serializer.data['picture']}")
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
