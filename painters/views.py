@@ -1,10 +1,18 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
 import mimetypes
 import os
 from django.http import HttpResponse, Http404
 import urllib
-from django.conf import settings
-from .models import Painter, Painting
+from .models import Painting
+from users.models import User
+from painters.models import Painting
+from painters.serializers import ImageCreateSerializer
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+
+from painters.serializers import ImageCreateSerializer
 
 """
 def Download_view(request, pk):
@@ -21,3 +29,14 @@ def Download_view(request, pk):
         raise Http404
 """    
     
+class ImageView(APIView) :
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request) :
+        serializer = ImageCreateSerializer(data = request.data)
+        if serializer.is_valid() :
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            

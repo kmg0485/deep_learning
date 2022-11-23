@@ -3,12 +3,15 @@ from users.models import User
 from image_optimizer.fields import OptimizedImageField
 
 
-class Painter(models.Model):
-    character1 = models.CharField(max_length=10)
-    character2 = models.CharField(max_length=10)
-    character3 = models.CharField(max_length=10)
-    class meta:
-        db_table = 'painters' # 데이터베이스 테이블 이름 새로 지정
+class Painter(models.Model) :
+    name = models.CharField(max_length=10)
+    style = OptimizedImageField(
+        upload_to="uploads/style/%Y/%m/%d",
+        optimized_image_output_size=(300, 300),
+        optimized_image_resize_method="cover",
+        null=True, blank=True
+    )
+
 
 class Painting(models.Model) :
     user = models.ForeignKey(User, on_delete=models.CASCADE)
