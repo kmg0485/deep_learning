@@ -97,8 +97,8 @@ def setup_exceptions():
 
 
 def fix_start_method():
-    if platform.system() == 'Darwin':
-        mp.set_start_method('spawn')
+    if platform.system() == "Darwin":
+        mp.set_start_method("spawn", force=True)
 
 
 def print_error(err):

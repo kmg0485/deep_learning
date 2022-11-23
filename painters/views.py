@@ -11,6 +11,10 @@ from painters.serializers import ImageCreateSerializer
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+from painters.style_transfer.cli import main
+
+import os, sys
+
 
 from painters.serializers import ImageCreateSerializer
 
@@ -37,10 +41,27 @@ class ImageView(APIView) :
         painter = Painter.objects.get(id=request.data["painter"])
         print(f"페인터의 id : {request.data['painter']}")
         print(f"화풍 스타일 : {painter.style}")
+        print(type(painter.style))
+        print(type(request.data["picture"]))
         if serializer.is_valid() :
             serializer.save(user=request.user)
-            print(f"콘텐트, 넣은 사진 : {serializer.data['picture']}")
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-            
+    
+    def put(self, request) :
+        paint = Painting.objects.get(id=request.data["id"])
+        content = paint.picture
+        painter = Painter.objects.get(id=1)
+        style = painter.style
+        
+        dir_path = "./style_transfer/cli.py"
+        terminnal_command = f"python cli.py ../media/{content} vg_starry_night_resized.jpg -s 156 --initial-iterations 100"
+        os.system(terminnal_command)
+        
+        painting = main(content, style)
+        serializer = ImageCreateSerializer(paint, data = request.data)
+        if serializer.is_valid() :
+            serializer.save(painting =painting)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else :
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
